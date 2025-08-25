@@ -16,7 +16,7 @@ class Book(Base):
 
     id = sq.Column(sq.Integer, primary_key=True)
     title = sq.Column(sq.String(length=100), nullable=False)
-    publisher_id = sq.Column(sq.Integer, sq.ForeignKey("publisher.id"), nullable=False)
+    id_publisher = sq.Column(sq.Integer, sq.ForeignKey("publisher.id"), nullable=False)
 
     publisher = relationship(Publisher, backref="books")
 
@@ -31,8 +31,8 @@ class Stock(Base):
 
     id = sq.Column(sq.Integer, primary_key=True)
     count = sq.Column(sq.Integer)
-    book_id = sq.Column(sq.Integer, sq.ForeignKey("book.id"), nullable=False)
-    shop_id = sq.Column(sq.Integer, sq.ForeignKey("shop.id"), nullable=False)
+    id_book = sq.Column(sq.Integer, sq.ForeignKey("book.id"), nullable=False)
+    id_shop = sq.Column(sq.Integer, sq.ForeignKey("shop.id"), nullable=False)
 
     book = relationship(Book, backref="stocks")
     shop = relationship(Shop, backref="stocks")
@@ -44,11 +44,11 @@ class Sale(Base):
     price = sq.Column(sq.Float, nullable=False)
     date_sale = sq.Column(sq.Date)
     count = sq.Column(sq.Integer)
-    stock_id = sq.Column(sq.Integer, sq.ForeignKey("stock.id"), nullable=False)
+    id_stock = sq.Column(sq.Integer, sq.ForeignKey("stock.id"), nullable=False)
 
     stock = relationship(Stock, backref="sales")
 
 
-def create_tales(engine):
+def create_tables(engine):
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
