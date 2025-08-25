@@ -1,4 +1,3 @@
-from enum import unique
 
 import sqlalchemy as sq
 from sqlalchemy.orm import declarative_base, relationship
@@ -17,7 +16,9 @@ class Book(Base):
 
     id = sq.Column(sq.Integer, primary_key=True)
     title = sq.Column(sq.String(length=100), nullable=False)
-    id_publisher = relationship(Publisher, backref="books")
+    publisher_id = sq.Column(sq.Integer, sq.ForeignKey("publisher.id"), nullable=False)
+
+    publisher = relationship(Publisher, backref="books")
 
 class Shop(Base):
     __tablename__="shop"
@@ -29,9 +30,12 @@ class Stock(Base):
     __tablename__="stock"
 
     id = sq.Column(sq.Integer, primary_key=True)
-    id_book = relationship(Book, backref="stocks")
-    id_shop = relationship(Shop, backref="stocks")
     count = sq.Column(sq.Integer)
+    book_id = sq.Column(sq.Integer, sq.ForeignKey("book.id"), nullable=False)
+    shop_id = sq.Column(sq.Integer, sq.ForeignKey("shop.id"), nullable=False)
+
+    book = relationship(Book, backref="stocks")
+    shop = relationship(Shop, backref="stocks")
 
 class Sale(Base):
     __tablename__="sale"
@@ -39,9 +43,10 @@ class Sale(Base):
     id = sq.Column(sq.Integer, primary_key=True)
     price = sq.Column(sq.Float, nullable=False)
     date_sale = sq.Column(sq.Date)
-    id_stock = relationship(Stock, backref="sales")
     count = sq.Column(sq.Integer)
+    stock_id = sq.Column(sq.Integer, sq.ForeignKey("stock.id"), nullable=False)
 
+    stock = relationship(Stock, backref="sales")
 
 
 def create_tales(engine):
