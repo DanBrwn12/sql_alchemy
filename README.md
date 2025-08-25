@@ -1,1 +1,1 @@
-# sql_alchemy
+Домашнее задание «Python и БД. ORM»
